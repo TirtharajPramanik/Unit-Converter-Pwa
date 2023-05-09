@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Ubuntu", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100vw;
+  min-height: 100vh;
+  overflow: scroll;
+}
+
+#card {
+  margin-block: 12px;
+  width: min(90%, 400px);
+  color: #fff;
+  border-radius: 18px;
+  background-color: #2d2d2d;
+  box-shadow: rgba(0, 0, 0, 0.1) -4px 9px 25px -6px;
+  transition-duration: 100ms;
+}
+
+#title {
+  color: #fffeee;
+  padding-block: 12px;
+  font-weight: 700;
+  font-size: 26px !important;
+}
+
+/* #container {} */
+
+.plate {
+  padding-block: min(5vh, 36px);
+  display: flex;
+  /* justify-content: center; */
+  justify-content: space-evenly;
+}
+
+#top {
+  color: #fff;
+}
+
+#bottom {
+  color: #000;
+  background-color: #fffeee;
+  border-radius: 0 0 18px 18px;
+}
+
+.line {
+  min-width: max(50%, 128px);
+  max-width: 80%;
+  text-align: initial;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.digit,
+.unit {
+  font-weight: 400;
+  font-size: 24px !important;
+  border: none;
+  color: inherit;
+  background-color: inherit;
+  padding: inherit;
+  cursor: auto;
+  font-size: inherit;
+  width: inherit;
+  transition-duration: 100ms;
+  word-wrap: break-word;
+  border-radius: 4px;
+  max-width: 50%;
+}
+
+.unit {
+  text-align: end;
+}
+
+.digit:hover,
+.digit:focus,
+.unit:hover,
+.unit:focus {
+  border: 1px solid;
+}
+
+#swap {
+  position: absolute;
+  width: 36px;
+  translate: -50% -50%;
+}

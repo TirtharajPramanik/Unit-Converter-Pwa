@@ -10,7 +10,7 @@ const temperatureUnits: Unit[] = [
     name: "kelvin",
     short: "K",
     fromStd: (std) => std + 273.15,
-    toStd: (val) => 273.15 - val,
+    toStd: (val) => val - 273.15,
   },
   {
     name: "fahrenheit",
@@ -26,10 +26,13 @@ interface Request {
   val: number;
 }
 
+// const roundTrim = (val: number, digit: number = 7) =>
+//   parseFloat(val.toFixed(digit));
+
 export default function convert(req: Request) {
   if (req.from == req.to) return req.val;
-  const std = temperatureUnits.find((val) => val.short == req.from).toStd(
+  const std = temperatureUnits.find((unit) => unit.short == req.from).toStd(
     req.val,
   );
-  return temperatureUnits.find((val) => val.short == req.to).fromStd(std);
+  return temperatureUnits.find((unit) => unit.short == req.to).fromStd(std);
 }

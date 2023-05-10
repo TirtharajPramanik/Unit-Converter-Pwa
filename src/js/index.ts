@@ -1,32 +1,61 @@
 import "../css/index.css";
 import swapicon from "../icon/swap.svg";
-import line from "./query";
+import line, { units } from "./query";
 import convert from "./convert";
+
+if ("serviceWorker" in navigator) {
+  onload = async () => {
+    try {
+      const registration = await navigator.serviceWorker.register(
+        "/service-worker.js",
+      );
+      console.log("SW Registered", registration);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+}
 
 (document.querySelector("img#swap") as HTMLImageElement).src = swapicon;
 
 [1, 2].forEach((i) => {
-  let oidx = i == 1 ? 2 : 1;
+  units.forEach((unit) => {
+    const opt = document.createElement("option");
+    opt.value = unit;
+    opt.innerText = unit;
+    line[i].unit.add(opt);
+  });
+  line[i].unit.value = line[i].defaultUnit;
+
+  const oidx = i == 1 ? 2 : 1;
+  line[i].unit.onchange = (_: Event) =>
+    line[oidx].input.dispatchEvent(new InputEvent("input"));
+
   line[i].input.oninput = (ev: InputEvent) => {
-    line[oidx].input.innerText = `${
-      convert({
-        from: line[i].unit.innerText,
-        to: line[oidx].unit.innerText,
-        val: parseFloat((ev.currentTarget as HTMLDivElement).innerText),
-      })
-    }`;
+    const req = {
+      from: line[i].unit.value,
+      to: line[oidx].unit.value,
+      val: parseFloat((ev.currentTarget as HTMLDivElement).innerText),
+    };
+    line[oidx].input.innerText = convert(req).toString();
+  };
+
+  line[i].input.onkeydown = (ev: KeyboardEvent) => {
+    if (ev.key == "Enter") {
+      if ("virtualKeyboard" in navigator) {
+        /* ts-ignore */
+        (navigator as any).virtualKeyboard.hide();
+      }
+      ev.currentTarget.dispatchEvent(new FocusEvent("blur"));
+    }
   };
 
   line[i].input.onblur = (ev: InputEvent) => {
-    let target = ev.currentTarget as HTMLDivElement;
-    if (target.innerText.trim().length == 0) {
-      target.innerText = line[i].defaultInput;
-    }
+    const target = ev.currentTarget as HTMLDivElement;
+    const text = target.innerText.trim();
+    target.innerText = (text.length == 0) ? line[i].defaultInput : text;
     target.dispatchEvent(new InputEvent("input"));
   };
-
-  line[i].unit.innerText = line[i].defaultUnit;
-  line[i].unit.contentEditable = false;
 });
 
 line[1].input.innerText = line[1].defaultInput.toString();
@@ -53,61 +82,8 @@ line[1].input.dispatchEvent(new InputEvent("input"));
 //
 //
 // ----------------------------------------------------------------------------------------------------------------------------------------
-
-// (document.querySelector("img#swap") as HTMLImageElement).src = swapicon;
-//
-// $("img#swap").attr("src", swapicon);
-//
-//
-// const input = (line: number) => `#line - ${ line }>.digit`;
-// const unit = (line: number) => `#line - ${ line }>.unit`;
-//
-// [1, 2].forEach((line) => $(unit(line)).attr("contentEditable", "false"));
-// $(unit(1)).text("℃");
-// $(unit(2)).text("℉");
-//
-// $(input(1)).on(
-//   "input",
-//   (_) =>
-//     $(input(2)).text(
-//       convert({
-//         from: $(unit(1)).text(),
-//         to: $(unit(2)).text(),
-//         val: parseFloat($(input(1)).text()),
-//       }),
-//     ),
-// );
-
-// $(input2).on(
-//   "input",
-//   (_) => $(input1).text((parseFloat($(input2).text()) - 32) * 5 / 9),
-// );
-//
-// $(input(1)).text(37);
-// $(input(1)).trigger("input");
-
-//
-// const unit2: HTMLElement = document.querySelector("#line-2>.unit");
-// unit2.contentEditable = "false";
-//
-// const input1: HTMLDivElement = document.querySelector("#line-1>.digit");
-// input1.inputMode = "numeric";
-// // // input1.innerText = `${ 37 } `;
-// input1.oninput = (_) => {
-//   input2.innerText = `${ parseFloat(input1.innerText) * 9 / 5 + 32 } `;
-// };
-// input1.onblur = (_) => {
-//   if (input1.innerText.trim().length == 0) input1.innerText = "37";
-//   input1.dispatchEvent(new InputEvent("input"));
-// };
-// //
-// const unit1: HTMLElement = document.querySelector("#line-1>.unit");
-// unit1.inputMode = "text";
-// // unit1.innerText = `℃`;
-// unit1.contentEditable = "false";
-//
 // ----------------------------------------------------------------------
-
+// {{{
 // interface Unit {
 //   name: string;
 //   short: string;
@@ -173,5 +149,5 @@ line[1].input.dispatchEvent(new InputEvent("input"));
 //
 // const lengthUnits = MetricUnit({ name: "meter", short: "m" });
 // categories["length"] = new Category(lengthUnits);
-
+// }}}
 // ----------------------------------------------------------------------

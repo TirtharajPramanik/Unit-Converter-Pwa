@@ -43,7 +43,7 @@ body {
 /* #bottom {} */
 
 .line {
-  padding-block: min(5vh, 36px);
+  padding-block: min(8vh, 48px);
   display: flex;
   justify-content: space-evenly;
 
@@ -72,7 +72,6 @@ body {
   border: none;
   color: inherit;
   background-color: inherit;
-  padding: inherit;
   cursor: auto;
   font-size: inherit;
   width: inherit;
@@ -86,6 +85,7 @@ body {
 
 .unit {
   text-align: end;
+  appearance: none;
 }
 
 .digit:hover,
@@ -97,6 +97,6 @@ body {
 
 #swap {
   position: absolute;
-  width: 36px;
+  width: 45px;
   translate: -50% -50%;
 }

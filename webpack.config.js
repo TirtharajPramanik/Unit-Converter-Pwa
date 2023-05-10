@@ -1,8 +1,10 @@
 const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
+const WorkboxkPlugin = require("workbox-webpack-plugin");
 
 module.exports = {
-  mode: "development",
+  // mode: "development",
+  mode: "production",
   devtool: "eval-source-map",
   entry: "./src/js/index.ts",
   output: {
@@ -26,7 +28,7 @@ module.exports = {
       },
       {
         // test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        test: /\.svg$/,
+        test: /\.(sv|pn)g$/,
         type: "asset/inline",
         include: [path.resolve(__dirname, "src")],
       },
@@ -42,6 +44,10 @@ module.exports = {
   plugins: [
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, "src/html/index.html"),
+    }),
+    new WorkboxkPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
     }),
   ],
   // externals: ["jquery"],

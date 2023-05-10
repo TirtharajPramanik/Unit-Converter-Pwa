@@ -32,9 +32,9 @@ module.exports = {
       },
     ],
   },
-  // resolve: {
-  //   extensions: [".ts", ".js"],
-  // },
+  resolve: {
+    extensions: [".ts", ".js"],
+  },
   devServer: {
     watchFiles: ["src/**/*"],
     // hot: true,
@@ -44,4 +44,5 @@ module.exports = {
       template: path.resolve(__dirname, "src/html/index.html"),
     }),
   ],
+  // externals: ["jquery"],
 };

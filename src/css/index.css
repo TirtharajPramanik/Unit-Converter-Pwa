@@ -36,30 +36,33 @@ body {
 
 /* #container {} */
 
-.plate {
+/* .plate {} */
+
+/* #top {} */
+
+/* #bottom {} */
+
+.line {
   padding-block: min(5vh, 36px);
   display: flex;
-  /* justify-content: center; */
   justify-content: space-evenly;
+
+  min-width: max(50%, 128px);
+  /* max-width: 80%; */
+  text-align: initial;
+  /* display: flex; */
+  /* justify-content: space-between; */
+  align-items: center;
 }
 
-#top {
+#line-1 {
   color: #fff;
 }
 
-#bottom {
+#line-2 {
   color: #000;
   background-color: #fffeee;
   border-radius: 0 0 18px 18px;
-}
-
-.line {
-  min-width: max(50%, 128px);
-  max-width: 80%;
-  text-align: initial;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .digit,
@@ -77,6 +80,8 @@ body {
   word-wrap: break-word;
   border-radius: 4px;
   max-width: 50%;
+  border: 1px solid;
+  border-color: transparent;
 }
 
 .unit {
@@ -87,7 +92,7 @@ body {
 .digit:focus,
 .unit:hover,
 .unit:focus {
-  border: 1px solid;
+  border-color: inherit;
 }
 
 #swap {

@@ -26,13 +26,17 @@ interface Request {
   val: number;
 }
 
-// const roundTrim = (val: number, digit: number = 7) =>
-//   parseFloat(val.toFixed(digit));
+export const round = (val: number, digit: number = 7) =>
+  parseFloat(val.toFixed(digit));
 
 export default function convert(req: Request) {
   if (req.from == req.to) return req.val;
-  const std = temperatureUnits.find((unit) => unit.short == req.from).toStd(
-    req.val,
+  const std = round(
+    temperatureUnits.find((unit) => unit.short == req.from).toStd(
+      round(req.val),
+    ),
   );
-  return temperatureUnits.find((unit) => unit.short == req.to).fromStd(std);
+  return round(
+    temperatureUnits.find((unit) => unit.short == req.to).fromStd(std),
+  );
 }

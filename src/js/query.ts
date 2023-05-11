@@ -1,19 +1,3 @@
-// import jq from "jquery";
-//
-// const elements = new Map<string, JQuery<HTMLElement>>();
-//
-// export default function query(selector: string): JQuery<HTMLElement> {
-//   if (!elements.has(selector)) elements[selector] = jq(selector);
-//   return elements[selector];
-// }
-//
-// export function invalidate(selector: string | null) {
-//   if (selector) elements.delete(selector);
-//   else elements.clear();
-// }
-//
-// export const jquery = jq;
-
 interface Line {
   input: HTMLDivElement;
   unit: HTMLSelectElement;
@@ -36,4 +20,4 @@ export default {
     defaultInput: 98.6,
     defaultUnit: "℉",
   } as Line,
-};
+} as { 1: Line, 2: Line; };

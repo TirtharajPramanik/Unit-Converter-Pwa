@@ -24,7 +24,6 @@ body {
   border-radius: 18px;
   background-color: #2d2d2d;
   box-shadow: rgba(0, 0, 0, 0.1) -4px 9px 25px -6px;
-  transition-duration: 100ms;
 }
 
 #title {
@@ -34,25 +33,13 @@ body {
   font-size: 26px !important;
 }
 
-/* #container {} */
-
-/* .plate {} */
-
-/* #top {} */
-
-/* #bottom {} */
-
 .line {
+  min-width: max(50%, 128px);
   padding-block: min(8vh, 48px);
   display: flex;
   justify-content: space-evenly;
-
-  min-width: max(50%, 128px);
-  /* max-width: 80%; */
-  text-align: initial;
-  /* display: flex; */
-  /* justify-content: space-between; */
   align-items: center;
+  text-align: initial;
 }
 
 #line-1 {
@@ -67,19 +54,17 @@ body {
 
 .digit,
 .unit {
+  width: inherit;
+  max-width: 50%;
   font-weight: 400;
   font-size: 24px !important;
-  border: none;
   color: inherit;
   background-color: inherit;
   cursor: auto;
-  font-size: inherit;
-  width: inherit;
   transition-duration: 100ms;
   word-wrap: break-word;
-  border-radius: 4px;
-  max-width: 50%;
   border: 1px solid;
+  border-radius: 4px;
   border-color: transparent;
 }
 

@@ -1,8 +1,9 @@
 import "../css/index.css";
 import swapicon from "../icon/swap.svg";
 import line, { units } from "./query";
-import convert from "./convert";
+import convert, { round } from "./convert";
 
+// REGISTER SERVICE WORKER
 if ("serviceWorker" in navigator) {
   onload = async () => {
     try {
@@ -16,138 +17,66 @@ if ("serviceWorker" in navigator) {
   };
 }
 
+
+// JUST AN IMAGE
 (document.querySelector("img#swap") as HTMLImageElement).src = swapicon;
 
-[1, 2].forEach((i) => {
+// INITIAL SETTINGS FOR INPUT FIELDS
+[1, 2].forEach((i: 1 | 2) => {
+
+
+  // ADD OPTIONS TO UNIT SELETORS
   units.forEach((unit) => {
     const opt = document.createElement("option");
     opt.value = unit;
     opt.innerText = unit;
     line[i].unit.add(opt);
   });
-  line[i].unit.value = line[i].defaultUnit;
+  line[i].unit.value = line[i].defaultUnit; // DEFAULT SELETED OPTION
 
-  const oidx = i == 1 ? 2 : 1;
-  line[i].unit.onchange = (_: Event) =>
+
+  const oidx = i == 1 ? 2 : 1; // THE OTHER LINE INDEX
+  line[i].unit.onchange = (_: Event) => // TRIGGER RECALCULATION ON UNIT CHANGE
     line[oidx].input.dispatchEvent(new InputEvent("input"));
+  // 👆 triggering event on other field cuz, this will re-evaluate this field
 
+
+  // RECALCULATE VALUES ON TYPE
   line[i].input.oninput = (ev: InputEvent) => {
-    const req = {
-      from: line[i].unit.value,
-      to: line[oidx].unit.value,
-      val: parseFloat((ev.currentTarget as HTMLDivElement).innerText),
+    const req = { // REQUEST OBJECT
+      from: line[i].unit.value, // FROM UNIT
+      to: line[oidx].unit.value, // TO UNIT
+      val: parseFloat((ev.currentTarget as HTMLDivElement).innerText), // CHANGED VALUE
     };
+    // RECALCULATE THE OTHER FIELD
     line[oidx].input.innerText = convert(req).toString();
   };
 
+
+  // ON ENTER KEY DOWN
   line[i].input.onkeydown = (ev: KeyboardEvent) => {
     if (ev.key == "Enter") {
-      if ("virtualKeyboard" in navigator) {
-        /* ts-ignore */
+      if ("virtualKeyboard" in navigator) // HIDE KEYBOARD ON MOBILE DEVICES
         (navigator as any).virtualKeyboard.hide();
-      }
-      ev.currentTarget.dispatchEvent(new FocusEvent("blur"));
+      ev.currentTarget.dispatchEvent(new FocusEvent("blur")); // TRIGGER INPUT REVALIDATION
     }
   };
 
-  line[i].input.onblur = (ev: InputEvent) => {
+
+  // REVALIDATE INPUT WHEN FOCUS LOST
+  line[i].input.onblur = (ev: FocusEvent) => {
     const target = ev.currentTarget as HTMLDivElement;
     const text = target.innerText.trim();
-    target.innerText = (text.length == 0) ? line[i].defaultInput : text;
-    target.dispatchEvent(new InputEvent("input"));
+    const num = round(parseFloat(text)).toString(); // ROUND INPUT TO 7 DIGITS AFTER DECIMAL
+    target.innerText = (num != "NaN") ? num
+      : ((text == "")
+        ? line[i].defaultInput.toString() // POPULATE FIELD WITH DEFAULT VALUE IF EMPTY
+        : text);
+    target.dispatchEvent(new InputEvent("input")); // TRIGGER RECALCULATION
   };
 });
 
+
+// INITIALIZE DEFAULT VALUES
 line[1].input.innerText = line[1].defaultInput.toString();
 line[1].input.dispatchEvent(new InputEvent("input"));
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// ----------------------------------------------------------------------------------------------------------------------------------------
-// ----------------------------------------------------------------------
-// {{{
-// interface Unit {
-//   name: string;
-//   short: string;
-// }
-//
-// // interface UnitCollection {
-// //   findByShort(short: string): Unit;
-// //   findByName(name: string): Unit;
-// // }
-//
-// class UnitMap implements MapConstructor {
-// }
-//
-// // {{{
-// const metricPrefixes = [
-//   { name: "quetta", short: "Q" },
-//   { name: "ronna", short: "R" },
-//   { name: "zetta", short: "Z" },
-//   { name: "yotta", short: "Y" },
-//   { name: "exa", short: "E" },
-//   { name: "peta", short: "P" },
-//   { name: "tera", short: "T" },
-//   { name: "giga", short: "G" },
-//   { name: "mega", short: "M" },
-//   { name: "kilo", short: "k" },
-//   { name: "hecto", short: "h" },
-//   { name: "deca", short: "da" },
-//   { name: "", short: "" },
-//   { name: "deci", short: "d" },
-//   { name: "centi", short: "c" },
-//   { name: "milli", short: "m" },
-//   { name: "micro", short: "µ" },
-//   { name: "nano", short: "n" },
-//   { name: "pico", short: "p" },
-//   { name: "femto", short: "f" },
-//   { name: "atto", short: "a" },
-//   { name: "zepto", short: "z" },
-//   { name: "yocto", short: "y" },
-//   { name: "ronto", short: "r" },
-//   { name: "quecto", short: "q" },
-// ];
-// // }}}
-//
-// class MetricUnit implements Units {
-//   unit: Unit;
-//   constructor(unit: Unit) {
-//     this.unit = unit;
-//   }
-// }
-//
-// class Category {
-//   constructor(units: Units) {}
-// }
-//
-// const categories = new Map<string, Category>();
-//
-// const temparatureUnits = [
-//   { name: "celcius", short: "℃" },
-//   { name: "fahrenheit", short: "℉" },
-//   { name: "kelvin", short: "K" },
-// ];
-// categories["temparature"] = new Category(temparatureUnits);
-//
-// const lengthUnits = MetricUnit({ name: "meter", short: "m" });
-// categories["length"] = new Category(lengthUnits);
-// }}}
-// ----------------------------------------------------------------------

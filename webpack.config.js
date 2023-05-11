@@ -1,18 +1,16 @@
 const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
-const WorkboxkPlugin = require("workbox-webpack-plugin");
+const WorkboxPlugin = require("workbox-webpack-plugin");
 
-module.exports = {
-  // mode: "development",
-  mode: "production",
+const isProduction = process.env.NODE_ENV == "production";
+
+const config = {
   devtool: "eval-source-map",
   entry: "./src/js/index.ts",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
-  },
-  experiments: {
-    syncWebAssembly: true,
+    clean: true,
   },
   module: {
     rules: [
@@ -28,7 +26,7 @@ module.exports = {
       },
       {
         // test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        test: /\.(sv|pn)g$/,
+        test: /\.svg$/,
         type: "asset/inline",
         include: [path.resolve(__dirname, "src")],
       },
@@ -39,16 +37,22 @@ module.exports = {
   },
   devServer: {
     watchFiles: ["src/**/*"],
-    // hot: true,
   },
   plugins: [
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, "src/html/index.html"),
     }),
-    new WorkboxkPlugin.GenerateSW({
-      clientsClaim: true,
-      skipWaiting: true,
-    }),
+
   ],
-  // externals: ["jquery"],
+};
+
+
+module.exports = () => {
+  if (isProduction) {
+    config.mode = "production";
+    config.plugins.push(new WorkboxPlugin.GenerateSW({ clientsClaim: true, skipWaiting: true, }));
+  } else {
+    config.mode = "development";
+  }
+  return config;
 };

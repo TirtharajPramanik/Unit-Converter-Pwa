@@ -1,18 +1,24 @@
 {
   "name": "uniconv",
   "version": "1.0.0",
-  "description": "basic unit converter",
-  "main": "index.js",
+  "description": "Unit Converter from Scratch PWA. Html, Css, Typescript, Webpack",
+  "main": "src/js/index.ts",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx ts-node -O '{\"module\": \"commonjs\"}' test/convert.ts",
     "serve": "webpack serve",
     "build": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-end=production && cp src/manifest/* dist/"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "PWA",
+    "Html",
+    "Css",
+    "Typescript",
+    "Webpack"
+  ],
+  "author": "Tiraj",
+  "license": "MIT",
   "devDependencies": {
     "css-loader": "^6.7.3",
     "html-webpack-plugin": "^5.5.1",
